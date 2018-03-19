@@ -3,12 +3,12 @@ body,html {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: url("./bg.jpg") no-repeat;
+  background: url("./todo.jpg") no-repeat;
   background-size: cover;
 }
 .todo{
   display: block;
-  background-color: #faebd79e;
+  background-color: #e98b119e;
   width: 500px;
   margin-left: 5em;
   margin-top: 4em;
@@ -16,18 +16,26 @@ body,html {
 }
 .card{
   display:block;
-  background-color: lightskyblue;
+  background-color: #e98b119e;
   width: 400px;
   margin-left: 5em;
   margin-top: 4em;
   padding: 10px;
 }
-
-.list-group-item {
-  position: relative;
+#edittodo{
+  margin:1em;
+}
+.checkbox{
   display: block;
-  padding: .75rem 1.25rem;
-  margin-bottom: -1px;
-  background-color: #ffffffb3 !important;
-  border: 1px solid rgba(0,0,0,.125);
+  width:90px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.336);
+}
+.word{
+  font-family: 'Berkshire Swash', cursive;
+}
+.logo{
+ 
+  background: url("./logo.jpg");
 }

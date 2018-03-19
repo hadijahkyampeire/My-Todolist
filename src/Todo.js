@@ -18,12 +18,12 @@ class Todo extends Component {
     event.preventDefault();
     axios.post('http://localhost:5000/todo/todos', {name, description, day})
     .then(response =>{
-      notify.show(response.data.message, 'success', 4000)
+      notify.show(response.data.messages, 'success', 4000)
       this.props.getTodoLists();
       this.setState({ name: "", description:"", day:"" });
     }).catch(error=>{
       if(error.response){
-        notify.show(error.response.data.message, 'error', 3000)
+        notify.show(error.response.data.messages, 'error', 3000)
         console.log(error.response)
       }else if(error.request){
         notify.show('Request not made', 'error', 4000)
@@ -52,13 +52,19 @@ class Todo extends Component {
             </div>
             <div>
             <label  htmlFor="days">Choose day</label>
-            <input type="text" value={day} name="day" onChange={this.handleInput} className="form-control" id="day"/>
-          </div>
-          <div className="form-check">
-        <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-        <label className="form-check-label"  htmlFor="exampleCheck1">Done</label>
-        </div>
+          <select className="form-control" id="exampleFormControlSelect1" value={day} name="day" onChange={this.handleInput}>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+          </select>
+        </div><br/>
+        <div>
           <button type="submit" className="btn btn-primary">Add </button>
+          </div>
         </form>
       </div>
       </div>
