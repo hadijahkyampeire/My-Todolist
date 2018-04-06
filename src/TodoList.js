@@ -7,7 +7,7 @@ import EditTodolist from './EditTodolist';
 
 
 export const Todolist = (props) => (
-  
+  <div className="col-sm-6 offset-sm-3">
   <div id="accordion">
   <div className="card">
     <div className="card-header" id={`todo-${props.id}`}>
@@ -19,7 +19,7 @@ export const Todolist = (props) => (
       </h5>
     </div>
 
-    <div id={`todoDetails${props.id}`} className="collapse show" aria-labelledby={`#todo-${props.id}`} data-parent="#accordion">
+    <div id={`todoDetails${props.id}`} className="collapse" aria-labelledby={`#todo-${props.id}`} data-parent="#accordion">
       <div className="card-body">
             Date_created: {props.date_created}<br/>
             Description: {props.description}<br/>
@@ -27,7 +27,7 @@ export const Todolist = (props) => (
       </div>
       <div className=" modal-footer text-center " style={{marginBottom:4}}>
       <div className="checkbox">
-      <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
+      <input type="checkbox" className="form-check-input" onChange={(event)=>props.Markdone(props.id, props.name, props.description, props.day, event.target.checked)} id="exampleCheck1"/>
         <label className="form-check-label"  htmlFor="exampleCheck1">Done</label>
         </div>
       <button className="btn btn-sm btn-primary" data-toggle="modal" 
@@ -38,7 +38,8 @@ export const Todolist = (props) => (
     </div>
   </div>
   <DeleteTodolist id={props.id} name={props.name} deleteTodolist={props.deleteTodolist}/>
-  <EditTodolist id={props.id} name={props.name} description={props.description} day={props.day} editTodolist={props.editTodolist}/>
+  <EditTodolist id={props.id} name={props.name} description={props.description} day={props.day} done={props.done} editTodolist={props.editTodolist}/>
+  </div>
   </div>
 )
 
@@ -86,8 +87,8 @@ class List extends Component {
   });
   }
 
-  editTodolist=(id, name, description, day)=>{
-    axios.put(`http://localhost:5000/todo/todos/${id}`,{name, description, day})
+  editTodolist=(id, name, description, day, done)=>{
+    axios.put(`http://localhost:5000/todo/todos/${id}`,{name, description, day, done})
     .then(response=>{
       document.getElementById(`closeEdit${id}`).click();
       notify.show(response.data.messages, 'success', 4000);
@@ -106,6 +107,26 @@ class List extends Component {
   });
 
   }
+
+  markAsDone=(id, name, description, day, done)=>{
+    console.log(done)
+    axios.put(`http://127.0.0.1:5000/todo/todos/${id}`, {name,description, day, done})
+    .then(response=>{
+      notify.show(response.data.messages, 'success', 4000);
+      this.getTodoLists();
+    }).catch(error => {
+      if (error.response) {
+          const { status } = error.response;
+          if (status === 404) {
+              this.setState({
+                  todolist: [],
+              });
+          }
+      } else if (error.request) {
+          notify.show("Request not made", 'error', 3000)
+      }
+  });
+  }
   componentWillMount() {
     this.getTodoLists();
 }
@@ -113,11 +134,13 @@ class List extends Component {
     const Todos = this.state.todolist
     let todolistItems = Todos
     .map(todo =>(<Todolist
+        Markdone={this.markAsDone}
         name = {todo.name}
         id={todo.id}
         description={todo.description}
         date_created={todo.date_created}
         day={todo.day}
+        done={todo.done}
         key={todo.id}
         deleteTodolist={()=>this.deleteTodolist(todo.id)}
         editTodolist={this.editTodolist}/>

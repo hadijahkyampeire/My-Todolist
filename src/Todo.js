@@ -24,7 +24,6 @@ class Todo extends Component {
     }).catch(error=>{
       if(error.response){
         notify.show(error.response.data.messages, 'error', 3000)
-        console.log(error.response)
       }else if(error.request){
         notify.show('Request not made', 'error', 4000)
       }

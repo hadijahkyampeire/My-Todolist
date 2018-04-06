@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { Component} from 'react';
+import axios from 'axios';
+import { notify } from 'react-notify-toast';
+
 
 export const DoneTodolist = (props) => (
   
@@ -33,3 +36,64 @@ export const DoneTodolist = (props) => (
     </div>
     </div>
   )
+
+  class DoneList extends Component{
+    state={
+      donelist:[]
+    }
+    getdoneTodoLists = () =>{
+      axios.get('http://localhost:5000/todo/todos/done')
+      .then(response=>{
+        this.setState({donelist: response.data.todo_items})
+      }).catch(error => {
+        if (error.response) {
+            const { status } = error.response;
+            if (status === 404) {
+                this.setState({
+                    donelist: [],
+                });
+            }
+        } else if (error.request) {
+            notify.show("Request not made", 'error', 3000)
+        }
+    });
+    }
+    componentWillMount() {
+      this.getdoneTodoLists();
+    }
+
+    render(){
+      const DoneTodos = this.state.donelist
+      let todolistItems = DoneTodos
+      .map(todo =>(<DoneTodolist
+          Markdone={this.markAsDone}
+          name = {todo.name}
+          id={todo.id}
+          description={todo.description}
+          date_created={todo.date_created}
+          day={todo.day}
+          done={todo.done}
+          key={todo.id}
+          />
+        ));
+
+      return(
+        <div>
+        <hr style={{backgroundColor:'#26A69A', height:2}}/>
+        <div className="text-center word"><strong>DONE TODOS</strong></div>
+        <div className="row lists">
+        {this.state.donelist.length
+            ? todolistItems
+            : <div className="col-sm-5 offset-sm-3">
+                <div className="alert alert-info" role="alert">
+                    <strong>Ooops!</strong> No done lists yet
+          </div></div>}
+          
+        </div>
+        </div>
+      );
+    }
+
+
+  }
+  export default DoneList;

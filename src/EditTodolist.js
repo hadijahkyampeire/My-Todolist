@@ -15,7 +15,7 @@ class EditCategory extends Component {
      */
     handleEditTodolist =(event) =>{
         event.preventDefault();
-        this.props.editTodolist(this.props.id, this.state.name, this.state.description, this.state.day)
+        this.props.editTodolist(this.props.id, this.state.name, this.state.description, this.state.day, this.props.done)
     }
     handleInput =(event) =>{
         const {name, value} = event.target;
