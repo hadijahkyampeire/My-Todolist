@@ -24,13 +24,9 @@ export const DoneTodolist = (props) => (
         </div>
         <div className=" modal-footer text-center " style={{marginBottom:4}}>
         <div className="checkbox">
-        <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-          <label className="form-check-label"  htmlFor="exampleCheck1">Done</label>
+        <input type="checkbox" className="form-check-input"  onChange={(event)=>props.MarkUndone(props.id, props.name, props.description, props.day, event.target.checked)} id="exampleCheck1"/>
+          <label className="form-check-label"  htmlFor="exampleCheck1">UnDo</label>
           </div>
-        <button className="btn btn-sm btn-primary" data-toggle="modal" 
-        data-target={`#edit_todolist${props.id}`} to="#" ><i className="fa fa-edit"/> Edit</button>
-      <button className="btn btn-sm btn-danger " data-toggle="modal" 
-      data-target={`#delete_todolist${props.id}`} to="#"><i className="fa fa-trash"/> Delete</button>
       </div>
       </div>
     </div>
@@ -39,8 +35,28 @@ export const DoneTodolist = (props) => (
 
   class DoneList extends Component{
     state={
-      donelist:[]
+      donelist:[],
+      todolist:[]
     }
+
+    getTodoLists = () =>{
+      axios.get('http://localhost:5000/todo/todos')
+      .then(response=>{
+        this.setState({todolist: response.data.todo_items})
+      }).catch(error => {
+        if (error.response) {
+            const { status } = error.response;
+            if (status === 404) {
+                this.setState({
+                    todolist: [],
+                });
+            }
+        } else if (error.request) {
+            notify.show("Request not made", 'error', 3000)
+        }
+    });
+    }
+
     getdoneTodoLists = () =>{
       axios.get('http://localhost:5000/todo/todos/done')
       .then(response=>{
@@ -58,6 +74,28 @@ export const DoneTodolist = (props) => (
         }
     });
     }
+
+    markAsUnDone=(id, name, description, day, done)=>{
+      // console.log(!done)
+      done = !done;
+      axios.put(`http://127.0.0.1:5000/todo/todos/${id}`, {name,description, day, done})
+      .then(response=>{
+        notify.show(response.data.messages, 'success', 4000);
+        this.getTodoLists();
+      }).catch(error => {
+        if (error.response) {
+            const { status } = error.response;
+            if (status === 404) {
+                this.setState({
+                    todolist: [],
+                });
+            }
+        } else if (error.request) {
+            notify.show("Request not made", 'error', 3000)
+        }
+    });
+    }
+
     componentWillMount() {
       this.getdoneTodoLists();
     }
@@ -66,7 +104,7 @@ export const DoneTodolist = (props) => (
       const DoneTodos = this.state.donelist
       let todolistItems = DoneTodos
       .map(todo =>(<DoneTodolist
-          Markdone={this.markAsDone}
+          MarkUndone={this.markAsUnDone}
           name = {todo.name}
           id={todo.id}
           description={todo.description}
