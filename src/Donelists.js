@@ -76,7 +76,6 @@ export const DoneTodolist = (props) => (
     }
 
     markAsUnDone=(id, name, description, day, done)=>{
-      // console.log(!done)
       done = !done;
       axios.put(`http://127.0.0.1:5000/todo/todos/${id}`, {name,description, day, done})
       .then(response=>{
