@@ -7,7 +7,6 @@ import EditTodolist from './EditTodolist';
 
 
 export const Todolist = (props) => (
-  <div className="col-sm-6 offset-sm-3">
   <div id="accordion">
   <div className="card">
     <div className="card-header" id={`todo-${props.id}`}>
@@ -39,7 +38,6 @@ export const Todolist = (props) => (
   </div>
   <DeleteTodolist id={props.id} name={props.name} deleteTodolist={props.deleteTodolist}/>
   <EditTodolist id={props.id} name={props.name} description={props.description} day={props.day} done={props.done} editTodolist={props.editTodolist}/>
-  </div>
   </div>
 )
 

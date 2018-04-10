@@ -39,3 +39,11 @@ body,html {
  
   background: url("./logo.jpg");
 }
+.addbtn{
+  margin-left: 5px;
+  margin-top: 5px;
+
+}
+.modal-content{
+  background-color: #eca03bad;
+}

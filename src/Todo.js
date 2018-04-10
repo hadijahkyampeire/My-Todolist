@@ -6,7 +6,7 @@ class Todo extends Component {
   state ={
       name:'',
       description:'',
-      day:''
+      day:'Monday'
     }
     handleInput = event => {
         const { name, value } = event.target;
@@ -19,11 +19,12 @@ class Todo extends Component {
     axios.post('http://localhost:5000/todo/todos', {name, description, day})
     .then(response =>{
       notify.show(response.data.messages, 'success', 4000)
+      document.getElementById('CloseAddModal').click();
       this.props.getTodoLists();
       this.setState({ name: "", description:"", day:"" });
     }).catch(error=>{
       if(error.response){
-        notify.show(error.response.data.messages, 'error', 3000)
+        notify.show('please fill all fields', 'error', 3000)
       }else if(error.request){
         notify.show('Request not made', 'error', 4000)
       }
@@ -37,7 +38,20 @@ class Todo extends Component {
     return (
       <div>
           <Notifications/>
-      <div className="todo">
+          <button type="button" className="btn btn-default addbtn" data-toggle="modal" data-target="#exampleModal">
+          Add Todo
+        </button>
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+       <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
         <form onSubmit={this.handleAddList}>
           <span><strong>MAKE YOUR TODO LIST</strong></span>
           <div className="form-group ">
@@ -61,11 +75,17 @@ class Todo extends Component {
             <option>Sunday</option>
           </select>
         </div><br/>
-        <div>
-          <button type="submit" className="btn btn-primary">Add </button>
-          </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="CloseAddModal">Close</button>
+      <button type="submit" className="btn btn-primary">Add </button>
+      </div>
         </form>
       </div>
+      
+    </div>
+  </div>
+</div>
+      
       </div>
     );
   }
