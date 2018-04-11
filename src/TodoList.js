@@ -48,7 +48,7 @@ class List extends Component {
   }
 
   getTodoLists = () =>{
-    axios.get('http://localhost:5000/todo/todos')
+    axios.get('http://localhost:5000/todo/todos?done=False')
     .then(response=>{
       this.setState({todolist: response.data.todo_items})
     }).catch(error => {

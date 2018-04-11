@@ -40,7 +40,7 @@ export const DoneTodolist = (props) => (
     }
 
     getTodoLists = () =>{
-      axios.get('http://localhost:5000/todo/todos')
+      axios.get('http://localhost:5000/todo/todos?done=False')
       .then(response=>{
         this.setState({todolist: response.data.todo_items})
       }).catch(error => {
@@ -58,7 +58,7 @@ export const DoneTodolist = (props) => (
     }
 
     getdoneTodoLists = () =>{
-      axios.get('http://localhost:5000/todo/todos/done')
+      axios.get('http://localhost:5000/todo/todos?done=True')
       .then(response=>{
         this.setState({donelist: response.data.todo_items})
       }).catch(error => {
